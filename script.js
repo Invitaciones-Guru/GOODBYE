@@ -54,32 +54,35 @@ document.getElementById('rsvpForm').onsubmit = (e) => {
     window.open(`https://wa.me/528186694938?text=${text}`, '_blank');
 };
 
-// Intento de Autoplay al primer toque
 document.addEventListener('DOMContentLoaded', () => {
     const music = document.getElementById('weddingMusic');
     const musicBtn = document.getElementById('musicBtn');
     const musicText = document.getElementById('musicText');
 
-    // Función para intentar el autoplay tras la primera interacción
-    function handleFirstInteraction() {
+    // Función para iniciar la música
+    function startMusic() {
         if (music.paused) {
             music.play().then(() => {
                 musicText.innerText = "PAUSE MUSIC";
-            }).catch(err => console.log("Esperando interacción..."));
+                // Una vez que arranca, eliminamos el evento de scroll para que no interfiera más
+                window.removeEventListener('scroll', startMusic);
+                window.removeEventListener('touchstart', startMusic);
+                window.removeEventListener('click', startMusic);
+            }).catch(error => {
+                console.log("Autoplay bloqueado hasta interacción física.");
+            });
         }
-        // Quitamos los eventos después del primer toque para que no interfieran con la pausa manual
-        document.removeEventListener('click', handleFirstInteraction);
-        document.removeEventListener('touchstart', handleFirstInteraction);
     }
 
-    // Escuchamos el primer clic o toque en cualquier parte para el "Autoplay"
-    document.addEventListener('click', handleFirstInteraction);
-    document.addEventListener('touchstart', handleFirstInteraction);
+    // Escuchar scroll o toques para activar el sonido
+    window.addEventListener('scroll', startMusic);
+    window.addEventListener('touchstart', startMusic); // Para toques rápidos en celular
+    window.addEventListener('click', startMusic);
 
-    // Lógica del botón para Play y Pausa manual
+    // Lógica del botón: PAUSA y PLAY manual
     musicBtn.addEventListener('click', (e) => {
-        // Evitamos que el clic del botón active también la función de interacción global
-        e.stopPropagation(); 
+        // Evitamos que el clic en el botón active las funciones de scroll
+        e.stopPropagation();
         
         if (music.paused) {
             music.play();
@@ -90,6 +93,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+
 
 
 
