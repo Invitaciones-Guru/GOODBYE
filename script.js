@@ -55,50 +55,99 @@ document.getElementById('rsvpForm').onsubmit = (e) => {
     window.open(`https://wa.me/528186694938?text=${text}`, '_blank');
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-    const music = document.getElementById('weddingMusic');
-    const musicBtn = document.getElementById('musicBtn');
-    const musicText = document.getElementById('musicText');
-    
-    let isMusicStarted = false; // Llave de seguridad
+// --- CONTROL DE MÚSICA (AUTOPLAY AL SCROLL/CLICK + PAUSA) ---
+const music = document.getElementById('weddingMusic');
+const musicBtn = document.getElementById('musicBtn');
+const musicText = document.getElementById('musicText');
 
-    // 1. Función para arrancar la música al interactuar (Scroll o Toque)
-    function startMusic() {
-        if (!isMusicStarted) {
-            music.play().then(() => {
-                isMusicStarted = true;
-                musicText.innerText = "PAUSE MUSIC";
-                // Limpiamos los eventos globales para que no vuelvan a ejecutarse
-                window.removeEventListener('scroll', startMusic);
-                document.removeEventListener('touchstart', startMusic);
-                document.removeEventListener('mousedown', startMusic);
-            }).catch(error => console.log("Esperando interacción real..."));
-        }
+// Función para arrancar la música
+const startAudio = () => {
+    music.play().then(() => {
+        musicText.innerHTML = "PAUSE MUSIC";
+    }).catch(err => console.log("Esperando interacción..."));
+};
+
+// Se activa al primer click O al primer scroll, pero SOLO UNA VEZ
+window.addEventListener('click', startAudio, { once: true });
+window.addEventListener('scroll', startAudio, { once: true });
+
+// Lógica del botón (Pausa y Play manual)
+musicBtn.onclick = (e) => {
+    // IMPORTANTE: detiene que el click llegue a la ventana y active el startAudio otra vez
+    e.stopPropagation(); 
+
+    if (music.paused) {
+        music.play();
+        musicText.innerHTML = "PAUSE MUSIC";
+    } else {
+        music.pause();
+        musicText.innerHTML = "PLAY MUSIC";
     }
+};
 
-    // Escuchamos el scroll y toques en toda la pantalla
-    window.addEventListener('scroll', startMusic);
-    document.addEventListener('touchstart', startMusic);
-    document.addEventListener('mousedown', startMusic);
+// --- RESTO DE FUNCIONES (COUNTDOWN, COPIAR, MODAL) ---
 
-    // 2. Función exclusiva del BOTÓN (Independiente)
-    musicBtn.addEventListener('click', (e) => {
-        // Esto es vital: evita que el clic llegue al fondo de la pantalla
-        e.stopPropagation(); 
-        e.preventDefault();
+// Inicializar AOS
+AOS.init({ duration: 1000, once: true });
 
-        // Si el scroll no la había arrancado, la arrancamos ahora
-        if (!isMusicStarted) isMusicStarted = true;
+// Cuenta Regresiva
+const targetDate = new Date("January 18, 2026 15:30:00").getTime();
+setInterval(() => {
+    const now = new Date().getTime();
+    const d = targetDate - now;
+    if (document.getElementById("days")) {
+        document.getElementById("days").innerText = Math.floor(d / (1000 * 60 * 60 * 24));
+        document.getElementById("hours").innerText = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        document.getElementById("minutes").innerText = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60));
+        document.getElementById("seconds").innerText = Math.floor((d % (1000 * 60)) / 1000);
+    }
+}, 1000);
 
-        if (music.paused) {
-            music.play();
-            musicText.innerText = "PAUSE MUSIC";
-        } else {
-            music.pause();
-            musicText.innerText = "PLAY MUSIC";
-        }
-    });
-});
+// Copiar CLABE
+function copyClabe() {
+    navigator.clipboard.writeText("0123 4567 8901 2345 67");
+    alert("CLABE copiada al portapapeles");
+}
+
+// Modal Galería
+function openModal(src) {
+    document.getElementById("imageModal").style.display = "block";
+    document.getElementById("modalImg").src = src;
+}
+function closeModal() {
+    document.getElementById("imageModal").style.display = "none";
+}
+// --- CONTROL DE MÚSICA (AUTOPLAY AL SCROLL/CLICK + PAUSA) ---
+const music = document.getElementById('weddingMusic');
+const musicBtn = document.getElementById('musicBtn');
+const musicText = document.getElementById('musicText');
+
+// Función para arrancar la música
+const startAudio = () => {
+    music.play().then(() => {
+        musicText.innerHTML = "PAUSE MUSIC";
+    }).catch(err => console.log("Esperando interacción..."));
+};
+
+// Se activa al primer click O al primer scroll, pero SOLO UNA VEZ
+window.addEventListener('click', startAudio, { once: true });
+window.addEventListener('scroll', startAudio, { once: true });
+
+// Lógica del botón (Pausa y Play manual)
+musicBtn.onclick = (e) => {
+    // IMPORTANTE: detiene que el click llegue a la ventana y active el startAudio otra vez
+    e.stopPropagation(); 
+
+    if (music.paused) {
+        music.play();
+        musicText.innerHTML = "PAUSE MUSIC";
+    } else {
+        music.pause();
+        musicText.innerHTML = "PLAY MUSIC";
+    }
+};
+
+
 
 
 
