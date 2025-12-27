@@ -5,6 +5,7 @@ AOS.init({
     mirror: false
 });
 
+
 // 2. VARIABLES DE MÚSICA
 const music = document.getElementById('weddingMusic');
 const musicBtn = document.getElementById('musicBtn');
