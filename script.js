@@ -1,88 +1,69 @@
-// 1. INICIALIZAR ANIMACIONES
-AOS.init({
-    duration: 1000,
-    once: true,
-    mirror: false
-});
+// 1. ANIMACIONES
+AOS.init({ duration: 1000, once: true });
 
 // 2. CUENTA REGRESIVA
 const targetDate = new Date("Jan 18, 2026 15:30:00").getTime();
 setInterval(() => {
     const now = new Date().getTime();
     const diff = targetDate - now;
-    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const s = Math.floor((diff % (1000 * 60)) / 1000);
-
-    if(document.getElementById("days")){
-        document.getElementById("days").innerHTML = d;
-        document.getElementById("hours").innerHTML = h;
-        document.getElementById("minutes").innerHTML = m;
-        document.getElementById("seconds").innerHTML = s;
+    if (document.getElementById("days")) {
+        document.getElementById("days").innerHTML = Math.floor(diff / (1000 * 60 * 60 * 24));
+        document.getElementById("hours").innerHTML = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        document.getElementById("minutes").innerHTML = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        document.getElementById("seconds").innerHTML = Math.floor((diff % (1000 * 60)) / 1000);
     }
 }, 1000);
 
-// 3. MÚSICA (CORREGIDA)
+// 3. MÚSICA (Lógica unificada)
 const music = document.getElementById('weddingMusic');
 const musicBtn = document.getElementById('musicBtn');
 const musicText = document.getElementById('musicText');
 
-// Esta función se encarga de que el texto siempre coincida con el estado del audio
-const updateBtnText = () => {
-    musicText.innerHTML = music.paused ? "PLAY MUSIC" : "PAUSE MUSIC";
-};
-
-musicBtn.onclick = (e) => {
-    e.stopPropagation(); // ¡ESTO ES LO QUE FALTA! Evita que el click reactive el autoplay
-    if (music.paused) {
-        music.play();
-    } else {
-        music.pause();
-    }
-    updateBtnText();
-};
-
-// Intento de Autoplay (Mejorado)
-const handleAutoplay = () => {
+// Función para dar Play y actualizar texto
+function playMusic() {
     if (music.paused) {
         music.play().then(() => {
-            updateBtnText();
-        }).catch(err => console.log("Esperando interacción..."));
+            musicText.innerHTML = "PAUSE MUSIC";
+        }).catch(e => console.log("Error al reproducir"));
+    }
+}
+
+// Autoplay al primer Click o Scroll
+window.addEventListener('click', playMusic, { once: true });
+window.addEventListener('scroll', playMusic, { once: true });
+
+// Botón de Pausa/Play Manual
+musicBtn.onclick = (e) => {
+    e.stopPropagation(); // Evita que el click llegue a la ventana
+    if (music.paused) {
+        playMusic();
+    } else {
+        music.pause();
+        musicText.innerHTML = "PLAY MUSIC";
     }
 };
 
-window.addEventListener('click', handleAutoplay, { once: true });
-window.addEventListener('scroll', handleAutoplay, { once: true });
-
-// 4. COPIAR CLABE
+// 4. OTROS (RSVP, CLABE, MODAL)
 function copyClabe() {
-    const clabe = "012345678901234567";
-    navigator.clipboard.writeText(clabe);
-    alert("CLABE copiada al portapapeles ✅");
+    navigator.clipboard.writeText("012345678901234567");
+    alert("CLABE copiada ✅");
 }
 
-// 5. RSVP WHATSAPP
 const rsvpForm = document.getElementById('rsvpForm');
-if(rsvpForm){
+if(rsvpForm) {
     rsvpForm.onsubmit = (e) => {
         e.preventDefault();
         const name = document.getElementById('guestName').value;
         const choice = document.getElementById('attendance').value;
-        const status = choice === "si" ? "Confirmo mi asistencia ✅" : "No podré asistir ❌";
-        const text = encodeURIComponent(`¡Hola! Soy ${name}. ${status}`);
+        const text = encodeURIComponent(`¡Hola! Soy ${name}. ${choice === "si" ? "Asistiré ✅" : "No asistiré ❌"}`);
         window.open(`https://wa.me/528186694938?text=${text}`, '_blank');
     };
 }
 
-// 6. MODAL
 function openModal(src) {
-    const modal = document.getElementById("imageModal");
-    const modalImg = document.getElementById("modalImg");
-    modal.style.display = "block";
-    modalImg.src = src;
+    document.getElementById("imageModal").style.display = "block";
+    document.getElementById("modalImg").src = src;
 }
-
 function closeModal() {
     document.getElementById("imageModal").style.display = "none";
 }
