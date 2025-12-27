@@ -37,6 +37,7 @@ musicBtn.onclick = () => {
     }
 };
 
+
 // 3. COPIAR CLABE
 function copyClabe() {
     const clabe = "012345678901234567";
@@ -54,20 +55,40 @@ document.getElementById('rsvpForm').onsubmit = (e) => {
     window.open(`https://wa.me/528186694938?text=${text}`, '_blank');
 };
 
-// Intento de Autoplay al primer toque
-window.addEventListener('click', function() {
-    const audio = document.getElementById('weddingMusic');
-    if (audio.paused) {
-        audio.play();
-    }
-}, { once: true }); // El 'once: true' hace que solo se ejecute el primer clic
+document.addEventListener('DOMContentLoaded', () => {
+    const music = document.getElementById('weddingMusic');
+    const musicBtn = document.getElementById('musicBtn');
+    const musicText = document.getElementById('musicText');
 
-window.addEventListener('scroll', function() {
-    const audio = document.getElementById('weddingMusic');
-    if (audio.paused) {
-        audio.play();
+    // Función para reproducir la música
+    function playWeddingMusic() {
+        music.play().then(() => {
+            musicText.innerText = "PAUSE MUSIC";
+            // Una vez que empieza a sonar, quitamos los escuchas para no repetir la acción
+            document.removeEventListener('click', playWeddingMusic);
+            document.removeEventListener('touchstart', playWeddingMusic);
+        }).catch(error => {
+            console.log("El navegador bloqueó el autoplay hasta interacción.");
+        });
     }
-}, { once: true });
+
+    // Intentar reproducir al primer toque en cualquier parte de la pantalla (Celulares)
+    document.addEventListener('click', playWeddingMusic);
+    document.addEventListener('touchstart', playWeddingMusic);
+
+    // Control manual del botón PLAY/PAUSE
+    musicBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Evita que el evento suba al documento
+        if (music.paused) {
+            music.play();
+            musicText.innerText = "PAUSE MUSIC";
+        } else {
+            music.pause();
+            musicText.innerText = "PLAY MUSIC";
+        }
+    });
+});
+
 
 
 
