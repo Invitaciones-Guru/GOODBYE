@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Isabella & Nicolás - Invitación Digital</title>
+    <meta property="og:title" content="¡Nuestra Boda! Isabella & Nicolás">
+    <meta property="og:description" content="Acompáñanos a celebrar nuestra unión este 18 de enero de 2026.">
+    <meta property="og:image" content="portada.jpeg">
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,400&family=Montserrat:wght@200;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="music-player" id="musicBtn" data-aos="fade-left">
+        <span id="musicText">PLAY MUSIC</span>
+    </div>
+    <audio id="weddingMusic" loop>
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <header class="hero">
+        <div class="hero-overlay" data-aos="zoom-out" data-aos-duration="2000">
+            <div class="hero-content">
+                <p class="top-label">SAVE THE DATE</p>
+                <h1>ISABELLA & NICOLÁS</h1>
+                <p class="hero-date">18 . 01 . 2026</p>
+            </div>
+        </div>
+    </header>
+
+    <section class="premium-intro-section" data-aos="fade-up">
+        <div class="container">
+            <p class="main-quote">"Nuestra unión comienza hoy, y estamos felices de compartirla con ustedes."</p>
+            
+            <div class="elegant-divider">
+                <span class="divider-dot"></span>
+            </div>
+
+            <div class="parents-container">
+                <div class="parents-col">
+                    <span class="parent-label">PADRES DE LA NOVIA</span>
+                    <div class="parent-names">
+                        <p class="name-script">Verónica Herrera</p>
+                        <div class="mini-line"></div>
+                        <p class="name-script">Diego Herrera</p>
+                    </div>
+                </div>
+                <div class="vertical-separator"></div>
+                <div class="parents-col">
+                    <span class="parent-label">PADRES DEL NOVIO</span>
+                    <div class="parent-names">
+                        <p class="name-script">Gabriela Torres</p>
+                        <div class="mini-line"></div>
+                        <p class="name-script">Javier Torres</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="full-photo" data-aos="fade-in">
+        <img src="foto1.jpeg" alt="Nosotros">
+    </div>
+
+    <div class="countdown-bar" data-aos="fade-up">
+        <p class="countdown-title">FALTAN:</p>
+        <div id="countdown">
+            <div class="time-block"><span id="days">00</span><small>DÍAS</small></div>
+            <div class="time-block"><span id="hours">00</span><small>HR</small></div>
+            <div class="time-block"><span id="minutes">00</span><small>MIN</small></div>
+            <div class="time-block"><span id="seconds">00</span><small>SEG</small></div>
+        </div>
+    </div>
+
+    <section class="itinerary-section">
+        <h2 class="section-title" data-aos="fade-right">ITINERARIO</h2>
+        
+        <div class="event-item" data-aos="fade-up">
+            <span class="event-hour">15:30</span>
+            <div class="event-info">
+                <h3>CEREMONIA</h3>
+                <div class="event-img"><img src="ceremonia.jpeg"></div>
+                <p>Iglesia San Josemaría Escrivá de Balaguer</p>
+                <a href="https://maps.apple/p/HwVAo-KyGK8Lg-" class="btn-link">VER MAPA</a>
+            </div>
+        </div>
+
+        <div class="event-item" data-aos="fade-up">
+            <span class="event-hour">18:00</span>
+            <div class="event-info">
+                <h3>RECEPCIÓN</h3>
+                <div class="event-img"><img src="foto7.jpeg"></div>
+                <p>Salón de eventos La Gotera</p>
+                <a href="https://maps.apple/p/jL_Eae4Bv-a7.w" class="btn-link">VER MAPA</a>
+            </div>
+        </div>
+
+        <div class="event-item" data-aos="fade-up">
+            <span class="event-hour">DRESS</span>
+            <div class="event-info">
+                <h3>DRESS CODE</h3>
+                <div class="event-img"><img src="foto2.jpeg" alt="Dress Code Inspo"></div>
+                <p>Riguroso Formal</p>
+                <a href="https://pin.it/42IAqQU1A" class="btn-link">VER INSPIRACIÓN</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="gifts-section" data-aos="fade-up">
+        <h2 class="section-title">MESA DE REGALOS</h2>
+        <p class="gift-intro">Tu presencia es nuestro mejor regalo, pero si deseas obsequiarnos algo:</p>
+        <div class="gift-grid">
+            <div class="gift-card" data-aos="flip-left">
+                <h3>TRANSFERENCIA</h3>
+                <p>Banco: BBVA</p>
+                <p>CLABE: 0123 4567 8901 2345 67</p>
+                <button class="btn-copy" onclick="copyClabe()">COPIAR CLABE</button>
+            </div>
+            <div class="gift-card" data-aos="flip-right">
+                <h3>LIVERPOOL</h3>
+                <p>Número de mesa: 51234567</p>
+                <a href="#" class="btn-link">IR AL SITIO</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="gallery-section">
+        <h2 class="section-title" data-aos="fade-up">GALERÍA</h2>
+        <div class="gallery-grid">
+            <img src="foto3.jpeg" alt="Foto 1" data-aos="zoom-in" onclick="openModal(this.src)">
+            <img src="foto4.jpeg" alt="Foto 2" data-aos="zoom-in" data-aos-delay="100" onclick="openModal(this.src)">
+            <img src="foto5.jpeg" alt="Foto 3" data-aos="zoom-in" data-aos-delay="200" onclick="openModal(this.src)">
+            <img src="foto6.jpeg" alt="Foto 4" data-aos="zoom-in" data-aos-delay="300" onclick="openModal(this.src)">
+        </div>
+    </section>
+
+    <div id="imageModal" class="modal-overlay" onclick="closeModal()">
+        <span class="close-btn">&times;</span>
+        <img id="modalImg" class="modal-content">
+    </div>
+
+    <section class="album-editorial-section">
+        <div class="album-layout">
+            <div class="album-text" data-aos="fade-up">
+                <h2 class="album-title">Álbum de Fotos</h2>
+                <p class="album-subtitle">NUESTRA HISTORIA A TRAVÉS DE TUS OJOS</p>
+                <p class="album-desc">Ayúdanos a inmortalizar cada momento compartiendo tus fotos con nosotros.</p>
+                <a href="https://photos.app.goo.gl/QChh5iwS7c75EZQu9" class="btn-noir-minimal">SUBIR FOTOS</a>
+            </div>
+            <div class="album-visual" data-aos="fade-up">
+                <div class="qr-placeholder">
+                    <img src="frame.jpg" alt="QR Album" class="qr-img">
+                    <span class="qr-label">ISABELLA & NICOLÁS</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="rsvp-section" data-aos="fade-in">
+        <div class="rsvp-container">
+            <h2 class="initials-script">I&N</h2>
+            <p>Confirma tu asistencia antes del 1 de enero</p>
+            <form id="rsvpForm">
+                <input type="text" id="guestName" placeholder="Tu nombre" required>
+                <select id="attendance" required>
+                    <option value="" disabled selected>¿Asistirás?</option>
+                    <option value="si">Confirmado ✅</option>
+                    <option value="no">No podré asistir ❌</option>
+                </select>
+                <button type="submit" class="btn-black">ENVIAR</button>
+            </form>
+            <p class="no-kids">UNA PERSONA - SOLO ADULTOS</p>
+        </div>
+    </section>
+
+    <footer class="footer-guru">
+        <p>ELABORATED BY GURU</p>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
