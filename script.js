@@ -61,33 +61,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const musicText = document.getElementById('musicText');
 
     // Función para reproducir la música
-    function playWeddingMusic() {
-        music.play().then(() => {
-            musicText.innerText = "PAUSE MUSIC";
-            // Una vez que empieza a sonar, quitamos los escuchas para no repetir la acción
-            document.removeEventListener('click', playWeddingMusic);
-            document.removeEventListener('touchstart', playWeddingMusic);
-        }).catch(error => {
-            console.log("El navegador bloqueó el autoplay hasta interacción.");
-        });
+    // 2. MÚSICA
+const musicBtn = document.getElementById('musicBtn');
+const music = document.getElementById('weddingMusic');
+let isPlaying = false;
+musicBtn.onclick = () => {
+    if (isPlaying) { music.pause(); musicBtn.querySelector('span').innerHTML = "PLAY MUSIC"; }
+    else { music.play(); musicBtn.querySelector('span').innerHTML = "PAUSE MUSIC"; }
+    isPlaying = !isPlaying;
+};
+    
+window.addEventListener('click', function() {
+    const audio = document.getElementById('weddingMusic');
+    if (audio.paused) {
+        audio.play();
     }
+}, { once: true }); // El 'once: true' hace que solo se ejecute el primer clic
 
-    // Intentar reproducir al primer toque en cualquier parte de la pantalla (Celulares)
-    document.addEventListener('click', playWeddingMusic);
-    document.addEventListener('touchstart', playWeddingMusic);
+window.addEventListener('scroll', function() {
+    const audio = document.getElementById('weddingMusic');
+    if (audio.paused) {
+        audio.play();
+    }
+}, { once: true });
 
-    // Control manual del botón PLAY/PAUSE
-    musicBtn.addEventListener('click', (e) => {
-        e.stopPropagation(); // Evita que el evento suba al documento
-        if (music.paused) {
-            music.play();
-            musicText.innerText = "PAUSE MUSIC";
-        } else {
-            music.pause();
-            musicText.innerText = "PLAY MUSIC";
-        }
-    });
-});
 
 
 
