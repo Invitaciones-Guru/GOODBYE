@@ -21,9 +21,9 @@ setInterval(() => {
     document.getElementById("hours").innerHTML = h;
     document.getElementById("minutes").innerHTML = m;
     document.getElementById("seconds").innerHTML = s;
-}, 1000);
-
-// 2. MÚSICA
+}, 
+            
+            // 2. MÚSICA
 const music = document.getElementById('weddingMusic');
 const musicBtn = document.getElementById('musicBtn');
 const musicText = document.getElementById('musicText');
@@ -57,44 +57,20 @@ document.getElementById('rsvpForm').onsubmit = (e) => {
 
 
 
-const music = document.getElementById('weddingMusic');
-const musicBtn = document.getElementById('musicBtn');
-const musicText = document.getElementById('musicText');
-
-let hasInteracted = false; // Esta es la clave
-
-// Función para arrancar la música (Autoplay)
-const startAudio = () => {
-    if (!hasInteracted) {
-        hasInteracted = true; // Bloqueamos futuros intentos de autoplay
-        music.play().then(() => {
-            musicText.innerHTML = "PAUSE MUSIC";
-        }).catch(err => console.log("Interacción requerida"));
-        
-        // Limpiamos los eventos de la ventana de inmediato
-        window.removeEventListener('click', startAudio);
-        window.removeEventListener('scroll', startAudio);
+// Intento de Autoplay al primer toque
+window.addEventListener('click', function() {
+    const audio = document.getElementById('weddingMusic');
+    if (audio.paused) {
+        audio.play();
     }
-};
+}, { once: true }); // El 'once: true' hace que solo se ejecute el primer clic
 
-// Listeners para el Autoplay (Solo la primera vez)
-window.addEventListener('click', startAudio);
-window.addEventListener('scroll', startAudio);
-
-// Lógica del Botón (Control Manual Total)
-musicBtn.onclick = (e) => {
-    e.stopPropagation(); // Evita que el click active el startAudio
-    hasInteracted = true; // Si el usuario toca el botón primero, bloqueamos el autoplay del scroll
-
-    if (music.paused) {
-        music.play();
-        musicText.innerHTML = "PAUSE MUSIC";
-    } else {
-        music.pause();
-        musicText.innerHTML = "PLAY MUSIC";
+window.addEventListener('scroll', function() {
+    const audio = document.getElementById('weddingMusic');
+    if (audio.paused) {
+        audio.play();
     }
-};
-
+}, { once: true });
 
 
 
