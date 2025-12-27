@@ -55,21 +55,41 @@ document.getElementById('rsvpForm').onsubmit = (e) => {
 };
 
 // Intento de Autoplay al primer toque
-window.addEventListener('click', function() {
-    const audio = document.getElementById('weddingMusic');
-    if (audio.paused) {
-        audio.play();
+document.addEventListener('DOMContentLoaded', () => {
+    const music = document.getElementById('weddingMusic');
+    const musicBtn = document.getElementById('musicBtn');
+    const musicText = document.getElementById('musicText');
+
+    // Función para intentar el autoplay tras la primera interacción
+    function handleFirstInteraction() {
+        if (music.paused) {
+            music.play().then(() => {
+                musicText.innerText = "PAUSE MUSIC";
+            }).catch(err => console.log("Esperando interacción..."));
+        }
+        // Quitamos los eventos después del primer toque para que no interfieran con la pausa manual
+        document.removeEventListener('click', handleFirstInteraction);
+        document.removeEventListener('touchstart', handleFirstInteraction);
     }
-}, { once: true }); // El 'once: true' hace que solo se ejecute el primer clic
 
-window.addEventListener('scroll', function() {
-    const audio = document.getElementById('weddingMusic');
-    if (audio.paused) {
-        audio.play();
-    }
-}, { once: true });
+    // Escuchamos el primer clic o toque en cualquier parte para el "Autoplay"
+    document.addEventListener('click', handleFirstInteraction);
+    document.addEventListener('touchstart', handleFirstInteraction);
 
-
+    // Lógica del botón para Play y Pausa manual
+    musicBtn.addEventListener('click', (e) => {
+        // Evitamos que el clic del botón active también la función de interacción global
+        e.stopPropagation(); 
+        
+        if (music.paused) {
+            music.play();
+            musicText.innerText = "PAUSE MUSIC";
+        } else {
+            music.pause();
+            musicText.innerText = "PLAY MUSIC";
+        }
+    });
+});
 
 
 
