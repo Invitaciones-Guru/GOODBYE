@@ -21,7 +21,7 @@ setInterval(() => {
     document.getElementById("hours").innerHTML = h;
     document.getElementById("minutes").innerHTML = m;
     document.getElementById("seconds").innerHTML = s;
-}, 
+},1000); 
             
             // 2. MÚSICA
 const music = document.getElementById('weddingMusic');
