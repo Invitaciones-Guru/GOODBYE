@@ -37,7 +37,6 @@ musicBtn.onclick = () => {
     }
 };
 
-
 // 3. COPIAR CLABE
 function copyClabe() {
     const clabe = "012345678901234567";
@@ -55,22 +54,7 @@ document.getElementById('rsvpForm').onsubmit = (e) => {
     window.open(`https://wa.me/528186694938?text=${text}`, '_blank');
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-    const music = document.getElementById('weddingMusic');
-    const musicBtn = document.getElementById('musicBtn');
-    const musicText = document.getElementById('musicText');
-
-    // Función para reproducir la música
-    // 2. MÚSICA
-const musicBtn = document.getElementById('musicBtn');
-const music = document.getElementById('weddingMusic');
-let isPlaying = false;
-musicBtn.onclick = () => {
-    if (isPlaying) { music.pause(); musicBtn.querySelector('span').innerHTML = "PLAY MUSIC"; }
-    else { music.play(); musicBtn.querySelector('span').innerHTML = "PAUSE MUSIC"; }
-    isPlaying = !isPlaying;
-};
-    
+// Intento de Autoplay al primer toque
 window.addEventListener('click', function() {
     const audio = document.getElementById('weddingMusic');
     if (audio.paused) {
@@ -84,8 +68,6 @@ window.addEventListener('scroll', function() {
         audio.play();
     }
 }, { once: true });
-
-
 
 
 
