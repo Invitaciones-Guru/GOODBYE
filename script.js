@@ -55,26 +55,36 @@ document.getElementById('rsvpForm').onsubmit = (e) => {
     window.open(`https://wa.me/528186694938?text=${text}`, '_blank');
 };
 
-// --- CONTROL DE MÚSICA (AUTOPLAY AL SCROLL/CLICK + PAUSA) ---
+
+
 const music = document.getElementById('weddingMusic');
 const musicBtn = document.getElementById('musicBtn');
 const musicText = document.getElementById('musicText');
 
-// Función para arrancar la música
+let hasInteracted = false; // Esta es la clave
+
+// Función para arrancar la música (Autoplay)
 const startAudio = () => {
-    music.play().then(() => {
-        musicText.innerHTML = "PAUSE MUSIC";
-    }).catch(err => console.log("Esperando interacción..."));
+    if (!hasInteracted) {
+        hasInteracted = true; // Bloqueamos futuros intentos de autoplay
+        music.play().then(() => {
+            musicText.innerHTML = "PAUSE MUSIC";
+        }).catch(err => console.log("Interacción requerida"));
+        
+        // Limpiamos los eventos de la ventana de inmediato
+        window.removeEventListener('click', startAudio);
+        window.removeEventListener('scroll', startAudio);
+    }
 };
 
-// Se activa al primer click O al primer scroll, pero SOLO UNA VEZ
-window.addEventListener('click', startAudio, { once: true });
-window.addEventListener('scroll', startAudio, { once: true });
+// Listeners para el Autoplay (Solo la primera vez)
+window.addEventListener('click', startAudio);
+window.addEventListener('scroll', startAudio);
 
-// Lógica del botón (Pausa y Play manual)
+// Lógica del Botón (Control Manual Total)
 musicBtn.onclick = (e) => {
-    // IMPORTANTE: detiene que el click llegue a la ventana y active el startAudio otra vez
-    e.stopPropagation(); 
+    e.stopPropagation(); // Evita que el click active el startAudio
+    hasInteracted = true; // Si el usuario toca el botón primero, bloqueamos el autoplay del scroll
 
     if (music.paused) {
         music.play();
@@ -85,67 +95,6 @@ musicBtn.onclick = (e) => {
     }
 };
 
-// --- RESTO DE FUNCIONES (COUNTDOWN, COPIAR, MODAL) ---
-
-// Inicializar AOS
-AOS.init({ duration: 1000, once: true });
-
-// Cuenta Regresiva
-const targetDate = new Date("January 18, 2026 15:30:00").getTime();
-setInterval(() => {
-    const now = new Date().getTime();
-    const d = targetDate - now;
-    if (document.getElementById("days")) {
-        document.getElementById("days").innerText = Math.floor(d / (1000 * 60 * 60 * 24));
-        document.getElementById("hours").innerText = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        document.getElementById("minutes").innerText = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60));
-        document.getElementById("seconds").innerText = Math.floor((d % (1000 * 60)) / 1000);
-    }
-}, 1000);
-
-// Copiar CLABE
-function copyClabe() {
-    navigator.clipboard.writeText("0123 4567 8901 2345 67");
-    alert("CLABE copiada al portapapeles");
-}
-
-// Modal Galería
-function openModal(src) {
-    document.getElementById("imageModal").style.display = "block";
-    document.getElementById("modalImg").src = src;
-}
-function closeModal() {
-    document.getElementById("imageModal").style.display = "none";
-}
-// --- CONTROL DE MÚSICA (AUTOPLAY AL SCROLL/CLICK + PAUSA) ---
-const music = document.getElementById('weddingMusic');
-const musicBtn = document.getElementById('musicBtn');
-const musicText = document.getElementById('musicText');
-
-// Función para arrancar la música
-const startAudio = () => {
-    music.play().then(() => {
-        musicText.innerHTML = "PAUSE MUSIC";
-    }).catch(err => console.log("Esperando interacción..."));
-};
-
-// Se activa al primer click O al primer scroll, pero SOLO UNA VEZ
-window.addEventListener('click', startAudio, { once: true });
-window.addEventListener('scroll', startAudio, { once: true });
-
-// Lógica del botón (Pausa y Play manual)
-musicBtn.onclick = (e) => {
-    // IMPORTANTE: detiene que el click llegue a la ventana y active el startAudio otra vez
-    e.stopPropagation(); 
-
-    if (music.paused) {
-        music.play();
-        musicText.innerHTML = "PAUSE MUSIC";
-    } else {
-        music.pause();
-        musicText.innerHTML = "PLAY MUSIC";
-    }
-};
 
 
 
