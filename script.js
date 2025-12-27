@@ -4,6 +4,7 @@ AOS.init({
     once: true
 });
 
+
 // 1. CUENTA REGRESIVA
 const targetDate = new Date("Jan 18, 2026 15:30:00").getTime();
 
@@ -58,32 +59,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const music = document.getElementById('weddingMusic');
     const musicBtn = document.getElementById('musicBtn');
     const musicText = document.getElementById('musicText');
+    
+    let isMusicStarted = false; // Llave de seguridad
 
-    // Función para iniciar la música
+    // 1. Función para arrancar la música al interactuar (Scroll o Toque)
     function startMusic() {
-        if (music.paused) {
+        if (!isMusicStarted) {
             music.play().then(() => {
+                isMusicStarted = true;
                 musicText.innerText = "PAUSE MUSIC";
-                // Una vez que arranca, eliminamos el evento de scroll para que no interfiera más
+                // Limpiamos los eventos globales para que no vuelvan a ejecutarse
                 window.removeEventListener('scroll', startMusic);
-                window.removeEventListener('touchstart', startMusic);
-                window.removeEventListener('click', startMusic);
-            }).catch(error => {
-                console.log("Autoplay bloqueado hasta interacción física.");
-            });
+                document.removeEventListener('touchstart', startMusic);
+                document.removeEventListener('mousedown', startMusic);
+            }).catch(error => console.log("Esperando interacción real..."));
         }
     }
 
-    // Escuchar scroll o toques para activar el sonido
+    // Escuchamos el scroll y toques en toda la pantalla
     window.addEventListener('scroll', startMusic);
-    window.addEventListener('touchstart', startMusic); // Para toques rápidos en celular
-    window.addEventListener('click', startMusic);
+    document.addEventListener('touchstart', startMusic);
+    document.addEventListener('mousedown', startMusic);
 
-    // Lógica del botón: PAUSA y PLAY manual
+    // 2. Función exclusiva del BOTÓN (Independiente)
     musicBtn.addEventListener('click', (e) => {
-        // Evitamos que el clic en el botón active las funciones de scroll
-        e.stopPropagation();
-        
+        // Esto es vital: evita que el clic llegue al fondo de la pantalla
+        e.stopPropagation(); 
+        e.preventDefault();
+
+        // Si el scroll no la había arrancado, la arrancamos ahora
+        if (!isMusicStarted) isMusicStarted = true;
+
         if (music.paused) {
             music.play();
             musicText.innerText = "PAUSE MUSIC";
@@ -93,7 +99,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
-
 
 
 
