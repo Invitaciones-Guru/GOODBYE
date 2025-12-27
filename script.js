@@ -1,68 +1,59 @@
-// 1. INICIALIZAR ANIMACIONES (Solo una vez)
+// 1. INICIALIZAR ANIMACIONES
 AOS.init({
     duration: 1000,
     once: true,
     mirror: false
 });
 
-
-// 2. VARIABLES DE MÚSICA
-const music = document.getElementById('weddingMusic');
-const musicBtn = document.getElementById('musicBtn');
-const musicText = document.getElementById('musicText');
-let autoPlayDone = false; // Llave de seguridad
-
-// Función para arrancar música desde Autoplay
-const startAudio = () => {
-    if (!autoPlayDone) {
-        autoPlayDone = true;
-        music.play().then(() => {
-            musicText.innerHTML = "PAUSE MUSIC";
-        }).catch(err => console.log("Esperando interacción..."));
-        
-        // Limpiamos los eventos para que no vuelvan a dispararse
-        window.removeEventListener('click', startAudio);
-        window.removeEventListener('scroll', startAudio);
-    }
-};
-
-// Listeners para Autoplay (se ejecutan solo la primera vez)
-window.addEventListener('click', startAudio);
-window.addEventListener('scroll', startAudio);
-
-// Lógica del Botón (Control Manual)
-musicBtn.onclick = (e) => {
-    e.stopPropagation(); // EVITA que el clic active el Autoplay de window
-    autoPlayDone = true; // Si el usuario toca el botón primero, bloqueamos el Autoplay del scroll
-
-    if (music.paused) {
-        music.play();
-        musicText.innerHTML = "PAUSE MUSIC";
-    } else {
-        music.pause();
-        musicText.innerHTML = "PLAY MUSIC";
-    }
-};
-
-// 3. CUENTA REGRESIVA
+// 2. CUENTA REGRESIVA
 const targetDate = new Date("Jan 18, 2026 15:30:00").getTime();
-
 setInterval(() => {
     const now = new Date().getTime();
     const diff = targetDate - now;
-
     const d = Math.floor(diff / (1000 * 60 * 60 * 24));
     const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     const s = Math.floor((diff % (1000 * 60)) / 1000);
 
-    if(document.getElementById("days")) {
+    if(document.getElementById("days")){
         document.getElementById("days").innerHTML = d;
         document.getElementById("hours").innerHTML = h;
         document.getElementById("minutes").innerHTML = m;
         document.getElementById("seconds").innerHTML = s;
     }
-}, 1000); 
+}, 1000);
+
+// 3. MÚSICA (CORREGIDA)
+const music = document.getElementById('weddingMusic');
+const musicBtn = document.getElementById('musicBtn');
+const musicText = document.getElementById('musicText');
+
+// Esta función se encarga de que el texto siempre coincida con el estado del audio
+const updateBtnText = () => {
+    musicText.innerHTML = music.paused ? "PLAY MUSIC" : "PAUSE MUSIC";
+};
+
+musicBtn.onclick = (e) => {
+    e.stopPropagation(); // ¡ESTO ES LO QUE FALTA! Evita que el click reactive el autoplay
+    if (music.paused) {
+        music.play();
+    } else {
+        music.pause();
+    }
+    updateBtnText();
+};
+
+// Intento de Autoplay (Mejorado)
+const handleAutoplay = () => {
+    if (music.paused) {
+        music.play().then(() => {
+            updateBtnText();
+        }).catch(err => console.log("Esperando interacción..."));
+    }
+};
+
+window.addEventListener('click', handleAutoplay, { once: true });
+window.addEventListener('scroll', handleAutoplay, { once: true });
 
 // 4. COPIAR CLABE
 function copyClabe() {
@@ -73,7 +64,7 @@ function copyClabe() {
 
 // 5. RSVP WHATSAPP
 const rsvpForm = document.getElementById('rsvpForm');
-if (rsvpForm) {
+if(rsvpForm){
     rsvpForm.onsubmit = (e) => {
         e.preventDefault();
         const name = document.getElementById('guestName').value;
@@ -84,7 +75,7 @@ if (rsvpForm) {
     };
 }
 
-// 6. MODAL GALERÍA
+// 6. MODAL
 function openModal(src) {
     const modal = document.getElementById("imageModal");
     const modalImg = document.getElementById("modalImg");
